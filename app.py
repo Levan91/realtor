@@ -240,11 +240,10 @@ st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=Tru
 
 current_options = get_filtered_options(df, st.session_state.filters)
 
-# --- Location Section ---
+# --- Main Filters Section ---
 with st.sidebar.container():
     st.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.markdown('<div class="filter-header" style="font-size:1.1rem;margin-bottom:0.7rem;">Location</div>', unsafe_allow_html=True)
-    lock_location = st.checkbox("\U0001F512 Lock Location Filters", key="lock_location")
+    st.markdown('<div class="filter-header" style="font-size:1.1rem;margin-bottom:0.7rem;">Filters</div>', unsafe_allow_html=True)
     development_options = ['All'] + current_options['development']
     selected_development = st.selectbox("Development", development_options, key="development_select",
         index=0 if st.session_state.filters['development'] is None else development_options.index(st.session_state.filters['development'])
@@ -254,26 +253,9 @@ with st.sidebar.container():
         index=0 if st.session_state.filters['community'] is None else community_options.index(st.session_state.filters['community'])
     )
     sub_community_options = ['All'] + current_options['sub_community']
-    selected_sub_community = st.selectbox("Sub community / Building", sub_community_options, key="sub_community_select",
+    selected_sub_community = st.selectbox("Sub Community", sub_community_options, key="sub_community_select",
         index=0 if st.session_state.filters['sub_community'] is None else sub_community_options.index(st.session_state.filters['sub_community'])
     )
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# --- Time Period Section ---
-with st.sidebar.container():
-    st.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.markdown('<div class="filter-header" style="font-size:1.1rem;margin-bottom:0.7rem;">Time Period</div>', unsafe_allow_html=True)
-    time_mode = st.selectbox("Time Filter Mode", ["Last N Days", "Custom Range"], key="time_mode")
-    if time_mode == "Last N Days":
-        n_days = st.number_input("Enter number of days", min_value=1, max_value=3650, value=365, step=1, key="n_days")
-    else:
-        st.date_input("Select date range", key="date_range", value=None)
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# --- Other Filters Section ---
-with st.sidebar.container():
-    st.markdown('<div class="filter-section">', unsafe_allow_html=True)
-    st.markdown('<div class="filter-header" style="font-size:1.1rem;margin-bottom:0.7rem;">Other Filters</div>', unsafe_allow_html=True)
     bedrooms_options = ['All'] + [str(x) for x in current_options['bedrooms']]
     selected_bedrooms = st.selectbox("Bedrooms", bedrooms_options, key="bedrooms_select",
         index=0 if st.session_state.filters['bedrooms'] is None else bedrooms_options.index(str(st.session_state.filters['bedrooms']))
@@ -300,7 +282,6 @@ if st.sidebar.button("🗑️ Clear All Filters", use_container_width=True):
     }
 
 # --- Update session state for filters based on selection ---
-# (This logic is outside the sidebar containers for clarity and to avoid duplicate widgets)
 if selected_development != 'All':
     if selected_development != st.session_state.filters['development']:
         st.session_state.filters = update_filters_based_on_selection(df, 'development', selected_development)
