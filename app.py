@@ -238,124 +238,116 @@ def update_filters_based_on_selection(df, changed_filter, new_value):
 st.sidebar.markdown('<h2 class="sidebar-title">🏠 Realtor</h2>', unsafe_allow_html=True)
 st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
 
-# Get current filtered options
 current_options = get_filtered_options(df, st.session_state.filters)
 
-# Development filter
-st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="filter-header">Development</div>', unsafe_allow_html=True)
-development_options = ['All'] + current_options['development']
-selected_development = st.sidebar.selectbox(
-    "Select Development",
-    options=development_options,
-    key="development_select",
-    index=0 if st.session_state.filters['development'] is None else development_options.index(st.session_state.filters['development'])
-)
+# Helper to render a filter card
+def filter_card(header, label, options, key, selected, to_str=False):
+    with st.sidebar.container():
+        st.markdown(f'<div class="filter-section">', unsafe_allow_html=True)
+        st.markdown(f'<div class="filter-header">{header}</div>', unsafe_allow_html=True)
+        if to_str:
+            options = [str(x) for x in options]
+            selected = str(selected) if selected is not None else None
+        value = st.selectbox(
+            label,
+            options=options,
+            key=key,
+            index=0 if selected is None else options.index(selected)
+        )
+        st.markdown('</div>', unsafe_allow_html=True)
+    return value
 
+development_options = ['All'] + current_options['development']
+selected_development = filter_card(
+    'Development',
+    'Select Development',
+    development_options,
+    'development_select',
+    st.session_state.filters['development']
+)
 if selected_development != 'All':
     if selected_development != st.session_state.filters['development']:
         st.session_state.filters = update_filters_based_on_selection(df, 'development', selected_development)
 else:
     if st.session_state.filters['development'] is not None:
         st.session_state.filters = update_filters_based_on_selection(df, 'development', None)
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
-# Community filter
-st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="filter-header">Community</div>', unsafe_allow_html=True)
 community_options = ['All'] + current_options['community']
-selected_community = st.sidebar.selectbox(
-    "Select Community",
-    options=community_options,
-    key="community_select",
-    index=0 if st.session_state.filters['community'] is None else community_options.index(st.session_state.filters['community'])
+selected_community = filter_card(
+    'Community',
+    'Select Community',
+    community_options,
+    'community_select',
+    st.session_state.filters['community']
 )
-
 if selected_community != 'All':
     if selected_community != st.session_state.filters['community']:
         st.session_state.filters = update_filters_based_on_selection(df, 'community', selected_community)
 else:
     if st.session_state.filters['community'] is not None:
         st.session_state.filters = update_filters_based_on_selection(df, 'community', None)
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
-# Sub Community filter
-st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="filter-header">Sub Community</div>', unsafe_allow_html=True)
 sub_community_options = ['All'] + current_options['sub_community']
-selected_sub_community = st.sidebar.selectbox(
-    "Select Sub Community",
-    options=sub_community_options,
-    key="sub_community_select",
-    index=0 if st.session_state.filters['sub_community'] is None else sub_community_options.index(st.session_state.filters['sub_community'])
+selected_sub_community = filter_card(
+    'Sub Community',
+    'Select Sub Community',
+    sub_community_options,
+    'sub_community_select',
+    st.session_state.filters['sub_community']
 )
-
 if selected_sub_community != 'All':
     if selected_sub_community != st.session_state.filters['sub_community']:
         st.session_state.filters = update_filters_based_on_selection(df, 'sub_community', selected_sub_community)
 else:
     if st.session_state.filters['sub_community'] is not None:
         st.session_state.filters = update_filters_based_on_selection(df, 'sub_community', None)
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
-# Bedrooms filter
-st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="filter-header">Bedrooms</div>', unsafe_allow_html=True)
 bedrooms_options = ['All'] + [str(x) for x in current_options['bedrooms']]
-selected_bedrooms = st.sidebar.selectbox(
-    "Select Bedrooms",
-    options=bedrooms_options,
-    key="bedrooms_select",
-    index=0 if st.session_state.filters['bedrooms'] is None else bedrooms_options.index(str(st.session_state.filters['bedrooms']))
+selected_bedrooms = filter_card(
+    'Bedrooms',
+    'Select Bedrooms',
+    bedrooms_options,
+    'bedrooms_select',
+    st.session_state.filters['bedrooms'],
+    to_str=True
 )
-
 if selected_bedrooms != 'All':
     if int(selected_bedrooms) != st.session_state.filters['bedrooms']:
         st.session_state.filters = update_filters_based_on_selection(df, 'bedrooms', int(selected_bedrooms))
 else:
     if st.session_state.filters['bedrooms'] is not None:
         st.session_state.filters = update_filters_based_on_selection(df, 'bedrooms', None)
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
-# Layout Type filter
-st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="filter-header">Layout Type</div>', unsafe_allow_html=True)
 layout_options = ['All'] + current_options['layout_type']
-selected_layout = st.sidebar.selectbox(
-    "Select Layout Type",
-    options=layout_options,
-    key="layout_select",
-    index=0 if st.session_state.filters['layout_type'] is None else layout_options.index(st.session_state.filters['layout_type'])
+selected_layout = filter_card(
+    'Layout Type',
+    'Select Layout Type',
+    layout_options,
+    'layout_select',
+    st.session_state.filters['layout_type']
 )
-
 if selected_layout != 'All':
     if selected_layout != st.session_state.filters['layout_type']:
         st.session_state.filters = update_filters_based_on_selection(df, 'layout_type', selected_layout)
 else:
     if st.session_state.filters['layout_type'] is not None:
         st.session_state.filters = update_filters_based_on_selection(df, 'layout_type', None)
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
-# Status filter
-st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.markdown('<div class="filter-header">Status</div>', unsafe_allow_html=True)
 status_options = ['All'] + current_options['status']
-selected_status = st.sidebar.selectbox(
-    "Select Status",
-    options=status_options,
-    key="status_select",
-    index=0 if st.session_state.filters['status'] is None else status_options.index(st.session_state.filters['status'])
+selected_status = filter_card(
+    'Status',
+    'Select Status',
+    status_options,
+    'status_select',
+    st.session_state.filters['status']
 )
-
 if selected_status != 'All':
     if selected_status != st.session_state.filters['status']:
         st.session_state.filters = update_filters_based_on_selection(df, 'status', selected_status)
 else:
     if st.session_state.filters['status'] is not None:
         st.session_state.filters = update_filters_based_on_selection(df, 'status', None)
-st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
-# Clear filters button
 st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
 if st.sidebar.button("🗑️ Clear All Filters", use_container_width=True):
     st.session_state.filters = {
