@@ -19,15 +19,85 @@ st.markdown("""
         text-align: center;
         margin-bottom: 2rem;
     }
-    .sidebar .sidebar-content {
-        background-color: #f8f9fa;
+    
+    /* Modern Sidebar Styling */
+    .css-1d391kg {
+        background-color: #fafafa;
     }
+    
+    .css-1lcbmhc {
+        background-color: #fafafa;
+    }
+    
+    /* Filter Section Styling */
     .filter-section {
-        margin-bottom: 1rem;
-        padding: 0.5rem;
-        border-radius: 0.3rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        transition: all 0.3s ease;
+    }
+    
+    .filter-section:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transform: translateY(-1px);
+    }
+    
+    /* Filter Headers */
+    .filter-header {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    /* Selectbox Styling */
+    .stSelectbox > div > div {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
         background-color: #ffffff;
-        border: 1px solid #e0e0e0;
+    }
+    
+    .stSelectbox > div > div:hover {
+        border-color: #1f77b4;
+    }
+    
+    /* Button Styling */
+    .stButton > button {
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        color: #495057;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .stButton > button:hover {
+        background: linear-gradient(135deg, #1f77b4 0%, #1565c0 100%);
+        color: white;
+        border-color: #1f77b4;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(31, 119, 180, 0.3);
+    }
+    
+    /* Sidebar Title */
+    .sidebar-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    /* Divider */
+    .sidebar-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent 0%, #dee2e6 50%, transparent 100%);
+        margin: 1.5rem 0;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -165,15 +235,15 @@ def update_filters_based_on_selection(df, changed_filter, new_value):
     return new_filters
 
 # Sidebar
-st.sidebar.title("🏠 Realtor Filters")
-st.sidebar.markdown("---")
+st.sidebar.markdown('<h2 class="sidebar-title">🏠 Realtor</h2>', unsafe_allow_html=True)
+st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
 
 # Get current filtered options
 current_options = get_filtered_options(df, st.session_state.filters)
 
 # Development filter
 st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.subheader("Development")
+st.sidebar.markdown('<div class="filter-header">Development</div>', unsafe_allow_html=True)
 development_options = ['All'] + current_options['development']
 selected_development = st.sidebar.selectbox(
     "Select Development",
@@ -192,7 +262,7 @@ st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Community filter
 st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.subheader("Community")
+st.sidebar.markdown('<div class="filter-header">Community</div>', unsafe_allow_html=True)
 community_options = ['All'] + current_options['community']
 selected_community = st.sidebar.selectbox(
     "Select Community",
@@ -211,7 +281,7 @@ st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Sub Community filter
 st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.subheader("Sub Community")
+st.sidebar.markdown('<div class="filter-header">Sub Community</div>', unsafe_allow_html=True)
 sub_community_options = ['All'] + current_options['sub_community']
 selected_sub_community = st.sidebar.selectbox(
     "Select Sub Community",
@@ -230,7 +300,7 @@ st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Bedrooms filter
 st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.subheader("Bedrooms")
+st.sidebar.markdown('<div class="filter-header">Bedrooms</div>', unsafe_allow_html=True)
 bedrooms_options = ['All'] + [str(x) for x in current_options['bedrooms']]
 selected_bedrooms = st.sidebar.selectbox(
     "Select Bedrooms",
@@ -249,7 +319,7 @@ st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Layout Type filter
 st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.subheader("Layout Type")
+st.sidebar.markdown('<div class="filter-header">Layout Type</div>', unsafe_allow_html=True)
 layout_options = ['All'] + current_options['layout_type']
 selected_layout = st.sidebar.selectbox(
     "Select Layout Type",
@@ -268,7 +338,7 @@ st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Status filter
 st.sidebar.markdown('<div class="filter-section">', unsafe_allow_html=True)
-st.sidebar.subheader("Status")
+st.sidebar.markdown('<div class="filter-header">Status</div>', unsafe_allow_html=True)
 status_options = ['All'] + current_options['status']
 selected_status = st.sidebar.selectbox(
     "Select Status",
@@ -286,7 +356,8 @@ else:
 st.sidebar.markdown('</div>', unsafe_allow_html=True)
 
 # Clear filters button
-if st.sidebar.button("Clear All Filters"):
+st.sidebar.markdown('<div class="sidebar-divider"></div>', unsafe_allow_html=True)
+if st.sidebar.button("🗑️ Clear All Filters", use_container_width=True):
     st.session_state.filters = {
         'development': None,
         'community': None,
